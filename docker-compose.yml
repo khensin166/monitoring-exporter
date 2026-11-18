@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  docker-exporter:
+    image: ${IMAGE_NAME:-docker-exporter}:${IMAGE_TAG:-1.0.0}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${IMAGE_TAG:-1.0.0}
+    container_name: docker-exporter
+    restart: unless-stopped
+    ports:
+      - "${EXPORTER_PORT:-9209}:9209"
+    environment:
+      - EXPORTER_PORT=9209
+      - DISCOVERY_INTERVAL=${DISCOVERY_INTERVAL:-15s}
+      - DOCKER_HOST=${DOCKER_HOST:-unix:///var/run/docker.sock}
+    volumes:
+      # Mount Docker socket in read-only mode for host security
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9209/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: 64M
+        reservations:
+          cpus: "0.05"
+          memory: 16M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

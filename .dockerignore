@@ -1,0 +1,32 @@
+# Git
+.git
+.gitignore
+
+# CI/CD
+.github/
+
+# Documentation & Markdown
+*.md
+docs/
+
+# Local build artifacts and binaries
+bin/
+dist/
+*.exe
+*.test
+*.out
+
+# Sample data and scratch files
+metrics_sample.txt
+scratch/
+
+# Compose files & env (should be mounted/configured at runtime, not baked into image)
+docker-compose*.yml
+.env*
+prometheus.yml
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

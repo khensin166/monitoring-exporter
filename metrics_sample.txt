@@ -1,0 +1,79 @@
+# HELP docker_container_block_read_bytes_total Total bytes read from block devices for this container.
+# TYPE docker_container_block_read_bytes_total counter
+docker_container_block_read_bytes_total{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 4.5659988992e+10
+docker_container_block_read_bytes_total{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 2.896905728e+09
+
+# HELP docker_container_block_write_bytes_total Total bytes written to block devices for this container.
+# TYPE docker_container_block_write_bytes_total counter
+docker_container_block_write_bytes_total{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 1.84834239e+08
+docker_container_block_write_bytes_total{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 6.621758e+06
+
+# HELP docker_container_cpu_usage_percent Current CPU usage percentage of the container.
+# TYPE docker_container_cpu_usage_percent gauge
+docker_container_cpu_usage_percent{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 2.45
+docker_container_cpu_usage_percent{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 0.18
+
+# HELP docker_container_health_status Healthcheck status of the container (1=healthy, 0=unhealthy, 2=starting, -1=no healthcheck).
+# TYPE docker_container_health_status gauge
+docker_container_health_status{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 1
+docker_container_health_status{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} -1
+
+# HELP docker_container_info Informational metric about the container with status and state labels.
+# TYPE docker_container_info gauge
+docker_container_info{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest",state="running",status="Up 3 days (healthy)"} 1
+docker_container_info{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3",state="running",status="Up 2 hours"} 1
+
+# HELP docker_container_memory_limit_bytes Configured memory limit of the container in bytes.
+# TYPE docker_container_memory_limit_bytes gauge
+docker_container_memory_limit_bytes{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 1.073741824e+09
+docker_container_memory_limit_bytes{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 2.147483648e+09
+
+# HELP docker_container_memory_usage_bytes Current memory usage of the container in bytes (excluding inactive cache).
+# TYPE docker_container_memory_usage_bytes gauge
+docker_container_memory_usage_bytes{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 1.4286848e+08
+docker_container_memory_usage_bytes{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 3.85875968e+08
+
+# HELP docker_container_memory_usage_percent Current memory usage percentage of the container.
+# TYPE docker_container_memory_usage_percent gauge
+docker_container_memory_usage_percent{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 13.31
+docker_container_memory_usage_percent{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 17.97
+
+# HELP docker_container_network_receive_bytes_total Total received bytes across all network interfaces for this container.
+# TYPE docker_container_network_receive_bytes_total counter
+docker_container_network_receive_bytes_total{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 8.9472394e+08
+docker_container_network_receive_bytes_total{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 4.195829e+07
+
+# HELP docker_container_network_transmit_bytes_total Total transmitted bytes across all network interfaces for this container.
+# TYPE docker_container_network_transmit_bytes_total counter
+docker_container_network_transmit_bytes_total{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 9.12398412e+08
+docker_container_network_transmit_bytes_total{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 8.293819e+07
+
+# HELP docker_container_restart_count Total number of times the container has restarted.
+# TYPE docker_container_restart_count counter
+docker_container_restart_count{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 0
+docker_container_restart_count{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 2
+
+# HELP docker_container_up 1 if container is currently running, 0 otherwise.
+# TYPE docker_container_up gauge
+docker_container_up{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 1
+docker_container_up{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 1
+
+# HELP go_goroutines Number of goroutines that currently exist.
+# TYPE go_goroutines gauge
+go_goroutines 8
+
+# HELP go_info Information about the Go environment.
+# TYPE go_info gauge
+go_info{version="go1.21.6"} 1
+
+# HELP go_memstats_alloc_bytes Number of bytes allocated and still in use.
+# TYPE go_memstats_alloc_bytes gauge
+go_memstats_alloc_bytes 1.849208e+06
+
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.42
+
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.4876672e+07

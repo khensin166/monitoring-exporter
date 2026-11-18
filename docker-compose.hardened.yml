@@ -1,0 +1,77 @@
+version: "3.8"
+
+# ==============================================================================
+# Hardened Deployment with Docker Socket Proxy
+# In this architecture, the exporter never has direct access to /var/run/docker.sock.
+# All requests pass through an isolated proxy enforcing strict read-only GET filters.
+# ==============================================================================
+
+networks:
+  monitoring-internal:
+    internal: true
+
+services:
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:0.1.1
+    container_name: docker-socket-proxy
+    restart: unless-stopped
+    environment:
+      # Strictly allow ONLY read-only container inspection and events
+      - CONTAINERS=1
+      - EVENTS=1
+      - INFO=1
+      - VERSION=1
+      # Deny all write, delete, exec, volume, network, and swarm mutations
+      - POST=0
+      - DELETE=0
+      - EXEC=0
+      - VOLUMES=0
+      - NETWORKS=0
+      - SWARM=0
+      - SECRETS=0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - monitoring-internal
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: 32M
+
+  docker-exporter:
+    image: ${IMAGE_NAME:-docker-exporter}:${IMAGE_TAG:-1.0.0}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VERSION: ${IMAGE_TAG:-1.0.0}
+    container_name: docker-exporter
+    restart: unless-stopped
+    depends_on:
+      - docker-socket-proxy
+    ports:
+      - "${EXPORTER_PORT:-9209}:9209"
+    environment:
+      - EXPORTER_PORT=9209
+      - DISCOVERY_INTERVAL=${DISCOVERY_INTERVAL:-15s}
+      - DOCKER_HOST=tcp://docker-socket-proxy:2375
+    networks:
+      - monitoring-internal
+      - default
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9209/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.20"
+          memory: 64M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
