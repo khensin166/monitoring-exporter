@@ -11,16 +11,16 @@ services:
     container_name: docker-exporter
     restart: unless-stopped
     ports:
-      - "${EXPORTER_PORT:-9209}:9209"
+      - "${EXPORTER_PORT:-8082}:8082"
     environment:
-      - EXPORTER_PORT=9209
+      - EXPORTER_PORT=8082
       - DISCOVERY_INTERVAL=${DISCOVERY_INTERVAL:-15s}
       - DOCKER_HOST=${DOCKER_HOST:-unix:///var/run/docker.sock}
     volumes:
       # Mount Docker socket in read-only mode for host security
       - /var/run/docker.sock:/var/run/docker.sock:ro
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9209/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8082/health || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3

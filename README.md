@@ -40,7 +40,7 @@ Built specifically for host `prd-gti-vm-grafana-gfnsvrcao-bed-01` (Linux amd64, 
 |  +-----------------------------------^-----------------------------+  |
 |                                      |                                |
 |  +-----------------------------------|-----------------------------+  |
-|  | docker-exporter container (:9209) | (read-only socket / proxy)  |  |
+|  | docker-exporter container (:8082) | (read-only socket / proxy)  |  |
 |  |                                   |                             |  |
 |  |   [Events Watcher] <--------------+                             |  |
 |  |   [Periodic Reconciler] <---------+                             |  |
@@ -52,14 +52,14 @@ Built specifically for host `prd-gti-vm-grafana-gfnsvrcao-bed-01` (Linux amd64, 
 |  |   [Prometheus Custom Collector]                                 |  |
 |  |          |                                                      |  |
 |  |          v                                                      |  |
-|  |   [HTTP Server :9209]                                           |  |
+|  |   [HTTP Server :8082]                                           |  |
 |  |     ├── /metrics (Prometheus pull format)                       |  |
 |  |     ├── /health  (JSON status & Docker connection check)        |  |
 |  |     └── /        (HTML landing page)                            |  |
 |  +-----------------------------------^-----------------------------+  |
 +--------------------------------------|--------------------------------+
                                        |
-                   Pull Scrape :9209/metrics (every 15s)
+                   Pull Scrape :8082/metrics (every 15s)
                                        |
                          +-------------+------------+
                          | Prometheus Server (PROD) |
@@ -102,7 +102,7 @@ All settings can be configured via environment variables or a `.env` file:
 
 | Variable | Default | Description |
 |---|---|---|
-| `EXPORTER_PORT` | `9209` | HTTP port exposed by the exporter. |
+| `EXPORTER_PORT` | `8082` | HTTP port exposed by the exporter. |
 | `DISCOVERY_INTERVAL` | `15s` | Frequency of full periodic container reconciliation. |
 | `DOCKER_HOST` | `unix:///var/run/docker.sock` | Docker Engine API endpoint (socket or TCP proxy). |
 | `IMAGE_NAME` | `docker-exporter` | Docker image repository name. |
@@ -148,7 +148,7 @@ Test that the exporter is operational:
 
 ```bash
 # 1. Check exporter health status
-curl -s http://localhost:9209/health | jq .
+curl -s http://localhost:8082/health | jq .
 # Expected output:
 # {
 #   "status": "healthy",
@@ -160,7 +160,7 @@ curl -s http://localhost:9209/health | jq .
 # }
 
 # 2. Check Prometheus metrics endpoint
-curl -s http://localhost:9209/metrics | grep docker_container_up
+curl -s http://localhost:8082/metrics | grep docker_container_up
 # Expected output:
 # docker_container_up{container_id="6e56dcb89a2b",container_name="cams-tps-aggregator",image="cams-tps-aggregator:latest"} 1
 # docker_container_up{container_id="72f52bf49a54",container_name="grafana-screenshot-v3",image="custom-grafana-renderer:v3"} 1
@@ -181,10 +181,10 @@ scrape_configs:
     scrape_timeout: 10s
     static_configs:
       - targets:
-          - "172.24.80.24:9209" # Replace with your target host IP
+          - "172.24.81.99:8082"
         labels:
           env: "PROD"
-          ip: "172.24.80.24"
+          ip: "172.24.81.99"
           hostname: "prd-gti-vm-grafana-gfnsvrcao-bed-01"
 ```
 
@@ -227,11 +227,11 @@ A workflow is provided at `.github/workflows/ci-cd.yml`:
 ### Issue 2: Prometheus shows Target `DOWN`
 - Test connectivity from Prometheus server:
   ```bash
-  curl -I http://<HOST_IP>:9209/health
+  curl -I http://172.24.81.99:8082/health
   ```
 - If connection times out, verify firewall rules (UFW or iptables):
   ```bash
-  sudo ufw allow 9209/tcp
+  sudo ufw allow 8082/tcp
   ```
 
 ### Issue 3: Stale Metrics from Removed Containers
@@ -250,5 +250,5 @@ A workflow is provided at `.github/workflows/ci-cd.yml`:
 | 5 | Removed container purged from active metrics | Docker Events API (`destroy`) instantly purges memory entry | **PASS** |
 | 6 | Restart count updates dynamically | `inspect.RestartCount` updated on reconciliation / restart event | **PASS** |
 | 7 | Resource metrics available for running containers | CPU %, memory bytes/%, net rx/tx, blk read/write calculated | **PASS** |
-| 8 | Endpoint `/metrics` accessible on port 9209 | HTTP server listens on `:9209` with `/metrics` and `/health` | **PASS** |
+| 8 | Endpoint `/metrics` accessible on port 8082 | HTTP server listens on `:8082` with `/metrics` and `/health` | **PASS** |
 | 9 | Prometheus displays target status `UP` | Returns HTTP 200 with standard OpenMetrics / Prometheus exposition | **PASS** |

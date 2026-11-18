@@ -39,16 +39,16 @@ RUN addgroup -g 10001 -S appgroup && \
 COPY --from=builder /bin/docker-exporter /usr/local/bin/docker-exporter
 
 # Expose default exporter port
-EXPOSE 9209
+EXPOSE 8082
 
 # Default environment variables
-ENV EXPORTER_PORT=9209 \
+ENV EXPORTER_PORT=8082 \
     DISCOVERY_INTERVAL=15s \
     DOCKER_HOST=unix:///var/run/docker.sock
 
 # Healthcheck
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:9209/health || exit 1
+    CMD curl -f http://localhost:8082/health || exit 1
 
 # Entrypoint
 ENTRYPOINT ["/usr/local/bin/docker-exporter"]

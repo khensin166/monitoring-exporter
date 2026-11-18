@@ -32,7 +32,7 @@ type Config struct {
 func loadConfig() Config {
 	port := os.Getenv("EXPORTER_PORT")
 	if port == "" {
-		port = "9209"
+		port = "8082"
 	}
 
 	intervalStr := os.Getenv("DISCOVERY_INTERVAL")
